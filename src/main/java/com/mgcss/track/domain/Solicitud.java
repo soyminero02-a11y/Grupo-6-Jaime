@@ -16,7 +16,7 @@ public class Solicitud {
     public Solicitud(Long id) {
         this.id = id;
         this.estado = Estado.ABIERTA; // Estado inicial por defecto
-        this.fechaCreacion = LocalDateTime.now()
+        this.fechaCreacion = LocalDateTime.now();
     }
 
     // Getters
