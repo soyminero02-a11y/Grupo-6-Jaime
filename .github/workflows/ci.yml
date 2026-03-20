@@ -24,4 +24,4 @@ jobs:
       run: chmod +x mvnw
 
     - name: Compilar y Ejecutar Tests (Build & Test)
-      run: ./mvnw clean verify
+      run: ./mvnw clean verify sonar:sonar -Dsonar.projectKey=soyminero02-a11y_grupo-6 -Dsonar.organization=soyminero02-a11y -Dsonar.host.url=https://sonarcloud.io
