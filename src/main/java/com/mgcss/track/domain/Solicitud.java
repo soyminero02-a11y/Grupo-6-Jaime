@@ -13,6 +13,7 @@ public class Solicitud {
         ABIERTA, EN_PROCESO, CERRADA
     }
 
+    
     public Solicitud(Long id) {
         this.id = id;
         this.estado = Estado.ABIERTA; // Estado inicial por defecto
