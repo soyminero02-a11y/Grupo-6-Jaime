@@ -8,6 +8,13 @@ public class Solicitud {
     private Estado estado;
     private LocalDateTime fechaCreacion;
 
+    // Constructor secundario para simular datos que vienen de la Base de Datos
+    public Solicitud(Long id, Estado estadoInicial) {
+        this.id = id;
+        this.estado = estadoInicial;
+        this.fechaCreacion = LocalDateTime.now();
+    }
+
     public enum Estado {
         ABIERTA, EN_PROCESO, CERRADA
     }
