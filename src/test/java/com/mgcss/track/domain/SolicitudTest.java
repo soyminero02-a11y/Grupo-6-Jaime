@@ -38,5 +38,31 @@ class SolicitudTest {
         assertEquals(Solicitud.Estado.ABIERTA, solicitud.getEstado());
         assertNotNull(solicitud.getFechaCreacion());
     }
+
+
+    @Test
+    void debe_permitir_asignar_tecnico_si_esta_activo() {
+        // Arrange: Crear solicitud y técnico activo [cite: 273]
+        Solicitud solicitud = new Solicitud(1L);
+        Tecnico tecnicoActivo = new Tecnico(100L, true);
+        
+        // Act: Asignación válida [cite: 276]
+        solicitud.asignarTecnico(tecnicoActivo);
+        
+        // Assert: Verificamos que se asignó correctamente
+        assertEquals(tecnicoActivo, solicitud.getTecnicoAsignado());
+    }
+
+    @Test
+    void no_debe_permitir_asignar_tecnico_si_esta_inactivo() {
+        // Arrange: Crear solicitud y técnico inactivo [cite: 274]
+        Solicitud solicitud = new Solicitud(1L);
+        Tecnico tecnicoInactivo = new Tecnico(200L, false);
+        
+        // Act & Assert: Asignación inválida falla [cite: 277]
+        assertThrows(IllegalArgumentException.class, () -> {
+            solicitud.asignarTecnico(tecnicoInactivo);
+        });
+    }
     
 }
