@@ -38,8 +38,5 @@ class SolicitudTest {
         assertEquals(Solicitud.Estado.ABIERTA, solicitud.getEstado());
         assertNotNull(solicitud.getFechaCreacion());
     }
-
-
-
     
 }
