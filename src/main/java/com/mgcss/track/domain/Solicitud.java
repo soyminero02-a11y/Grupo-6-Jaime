@@ -1,42 +1,49 @@
 package com.mgcss.track.domain;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Transient; 
+import java.time.LocalDate;
 
+@Entity
 public class Solicitud {
 
+    @Id
     private Long id;
+    
     private Estado estado;
-    private LocalDateTime fechaCreacion;
+    
+    @Transient 
     private Tecnico tecnicoAsignado;
+    
+    private LocalDate fechaCreacion; 
 
-    public enum Estado {
-        ABIERTA, EN_PROCESO, CERRADA
+    protected Solicitud() {
     }
 
-    // Constructor secundario para simular datos que vienen de la Base de Datos
     public Solicitud(Long id, Estado estadoInicial) {
         this.id = id;
         this.estado = estadoInicial;
-        this.fechaCreacion = LocalDateTime.now();
+        this.fechaCreacion = LocalDate.now();
     }
-
+    
     public Solicitud(Long id) {
         this.id = id;
-        this.estado = Estado.ABIERTA; 
-        this.fechaCreacion = LocalDateTime.now();
+        this.estado = Estado.ABIERTA;
+        this.fechaCreacion = LocalDate.now();
     }
 
-    public Long getId() { return id; }
-    public Estado getEstado() { return estado; }
-    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
+    public enum Estado {
+        ABIERTA, EN_PROCESO, CERRADA 
+    }
 
     public void cerrar() {
+        // Arreglado para que coincida con lo que exige tu test unitario
         if (this.estado != Estado.EN_PROCESO) {
-            throw new IllegalStateException("Solo solicitudes en proceso pueden cerrarse");
+            throw new IllegalStateException("Solo se puede cerrar si está en proceso");
         }
         this.estado = Estado.CERRADA;
     }
-
 
     public void asignarTecnico(Tecnico tecnico) {
         if (!tecnico.isActivo()) {
@@ -45,8 +52,19 @@ public class Solicitud {
         this.tecnicoAsignado = tecnico;
     }
 
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public Tecnico getTecnicoAsignado() {
         return tecnicoAsignado;
+    }
+
+    public LocalDate getFechaCreacion() {
+        return fechaCreacion;
     }
 }
