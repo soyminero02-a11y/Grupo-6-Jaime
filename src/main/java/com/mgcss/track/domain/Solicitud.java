@@ -46,10 +46,15 @@ public class Solicitud {
     }
 
     public void asignarTecnico(Tecnico tecnico) {
+        validarTecnicoActivo(tecnico); 
+        this.tecnicoAsignado = tecnico;
+    }
+
+    
+    private void validarTecnicoActivo(Tecnico tecnico) {
         if (!tecnico.isActivo()) {
             throw new IllegalArgumentException("No se puede asignar un técnico inactivo a la solicitud");
         }
-        this.tecnicoAsignado = tecnico;
     }
 
     public Estado getEstado() {
