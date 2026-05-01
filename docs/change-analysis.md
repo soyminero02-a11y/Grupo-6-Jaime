@@ -23,3 +23,8 @@ Paso 3.4
 (Hemos usado la opción: Lista interna de cambios de estado.)
 
 Porque el estado de la solicitud es un enumerado simple, usar una lista interna  es la opción más directa y menos invasiva. Asi se evita crear nuevas tablas o entidades separadas que aumentarían innecesariamente la complejidad del modelo en esta etapa temprana del requisito.
+
+Fase 4: Impacto en persistencia
+En esta iteración, el 'historialEstados' se mantiene en memoria y no se persiste en la base de datos. 
+
+Justificación (Mantenibilidad):Para no bloquear el despliegue del nuevo requisito funcional, optamos por no alterar el esquema de base de datos todavía. Esto reduce el riesgo de impacto y la deuda técnica inmediata, posponiendo la migración de la tabla para una iteración futura donde se defina si el histórico requiere una tabla propia o una colección elemental.
