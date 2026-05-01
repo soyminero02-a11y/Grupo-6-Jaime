@@ -72,4 +72,11 @@ public class Solicitud {
     public LocalDate getFechaCreacion() {
         return fechaCreacion;
     }
+
+    public void reabrir() {
+        if (this.estado != Estado.CERRADA) {
+            throw new IllegalStateException("Solo se pueden reabrir solicitudes que están cerradas");
+        }
+        this.estado = Estado.EN_PROCESO;
+    }
 }
