@@ -4,18 +4,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient; 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Solicitud {
 
     @Id
     private Long id;
-    
     private Estado estado;
+    private List<Estado> historialEstados = new ArrayList<>();
     
     @Transient 
     private Tecnico tecnicoAsignado;
-    
     private LocalDate fechaCreacion; 
 
     protected Solicitud() {
@@ -24,12 +25,14 @@ public class Solicitud {
     public Solicitud(Long id, Estado estadoInicial) {
         this.id = id;
         this.estado = estadoInicial;
+        this.historialEstados.add(this.estado);
         this.fechaCreacion = LocalDate.now();
     }
     
     public Solicitud(Long id) {
         this.id = id;
         this.estado = Estado.ABIERTA;
+        this.historialEstados.add(this.estado);
         this.fechaCreacion = LocalDate.now();
     }
 
@@ -38,11 +41,11 @@ public class Solicitud {
     }
 
     public void cerrar() {
-        // Arreglado para que coincida con lo que exige tu test unitario
         if (this.estado != Estado.EN_PROCESO) {
             throw new IllegalStateException("Solo se puede cerrar si está en proceso");
         }
         this.estado = Estado.CERRADA;
+        this.historialEstados.add(this.estado);
     }
 
     public void asignarTecnico(Tecnico tecnico) {
@@ -71,5 +74,17 @@ public class Solicitud {
 
     public LocalDate getFechaCreacion() {
         return fechaCreacion;
+    }
+
+    public void reabrir() {
+        if (this.estado != Estado.CERRADA) {
+            throw new IllegalStateException("Solo se pueden reabrir solicitudes que están cerradas");
+        }
+        this.estado = Estado.EN_PROCESO;
+        this.historialEstados.add(this.estado);
+    }
+
+    public List<Estado> getHistorialEstados() {
+        return this.historialEstados;
     }
 }

@@ -1,5 +1,7 @@
 Análisis de Impacto
 
+Fase 2
+
 1. ¿Qué métodos del dominio se ven afectados?
 Se verá afectado el comportamiento general de la clase 'Solicitud'. Se deberá crear un nuevo método 'reabrir()' y modificar la lógica interna para registrar en una lista cada vez que el 'estado' cambie.
 
@@ -14,3 +16,10 @@ La entidad 'Solicitud' debe incluir una nueva estructura de datos. Para mantener
 
 5. ¿Qué impacto tiene en persistencia?
 Si el histórico se persiste en la base de datos H2, necesitaremos añadir un mapeo JPA especial a la lista del histórico dentro de la entidad 'Solicitud' y verificar que se guarda correctamente mediante un test de integración.
+
+
+Paso 3.4
+
+(Hemos usado la opción: Lista interna de cambios de estado.)
+
+Porque el estado de la solicitud es un enumerado simple, usar una lista interna  es la opción más directa y menos invasiva. Asi se evita crear nuevas tablas o entidades separadas que aumentarían innecesariamente la complejidad del modelo en esta etapa temprana del requisito.
