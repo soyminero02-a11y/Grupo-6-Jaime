@@ -64,5 +64,20 @@ class SolicitudTest {
             solicitud.asignarTecnico(tecnicoInactivo);
         });
     }
+
+    @Test
+    void debe_permitir_reabrir_solicitud_cerrada() {
+      
+        Solicitud solicitud = new Solicitud(1L, Solicitud.Estado.EN_PROCESO);
+        
+     
+        solicitud.cerrar();
+        
+      
+        solicitud.reabrir();
+        
+
+        assertEquals(Solicitud.Estado.EN_PROCESO, solicitud.getEstado());
+    }
     
 }
