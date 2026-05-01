@@ -25,14 +25,14 @@ public class Solicitud {
     public Solicitud(Long id, Estado estadoInicial) {
         this.id = id;
         this.estado = estadoInicial;
-        this.historialEstados.add(this.estado);
+        registrarCambioEstado();
         this.fechaCreacion = LocalDate.now();
     }
     
     public Solicitud(Long id) {
         this.id = id;
         this.estado = Estado.ABIERTA;
-        this.historialEstados.add(this.estado);
+        registrarCambioEstado();
         this.fechaCreacion = LocalDate.now();
     }
 
@@ -45,7 +45,7 @@ public class Solicitud {
             throw new IllegalStateException("Solo se puede cerrar si está en proceso");
         }
         this.estado = Estado.CERRADA;
-        this.historialEstados.add(this.estado);
+        registrarCambioEstado();
     }
 
     public void asignarTecnico(Tecnico tecnico) {
@@ -58,6 +58,10 @@ public class Solicitud {
         if (!tecnico.isActivo()) {
             throw new IllegalArgumentException("No se puede asignar un técnico inactivo a la solicitud");
         }
+    }
+
+    private void registrarCambioEstado() {
+        this.historialEstados.add(this.estado);
     }
 
     public Estado getEstado() {
@@ -81,7 +85,7 @@ public class Solicitud {
             throw new IllegalStateException("Solo se pueden reabrir solicitudes que están cerradas");
         }
         this.estado = Estado.EN_PROCESO;
-        this.historialEstados.add(this.estado);
+        registrarCambioEstado();
     }
 
     public List<Estado> getHistorialEstados() {
