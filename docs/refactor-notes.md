@@ -2,7 +2,6 @@ Análisis de Refactorización
 
 Paso 2
 
-
 (Hemos elegido de los cuatro tipos el de: Clase con demasiadas responsabilidades)
 
 1. Problema identificado
@@ -18,8 +17,10 @@ Si en el futuro hay que comprobar más cosas, el método de asignación se volve
 Paso 5
 
 1. Qué métrica mejoró:
- Se mantiene el Maintainability Rating en A, pero se ha contenido la Complejidad Ciclomática del método principal pasando de tener 2 issues a solo una después del cambio. También hemos tenido un ligero aumento del coverage que ha pasado de un 93,6 a un 93,9. El resto del trabajo se ha mantenido todo en A.
+Se mantiene el Maintainability Rating en A, pero se ha contenido la Complejidad Ciclomática del método principal pasando de tener 2 issues a solo una después del cambio. También hemos tenido un ligero aumento del coverage que ha pasado de un 93,6 a un 93,9. El resto del trabajo se ha mantenido todo en A.
+
 2. Qué técnica de refactor se aplicó:
- "Extract Method".
+"Extract Method".
+
 3. Qué beneficio aporta: 
 El código ahora se lee como lenguaje natural y las futuras validaciones se podrán añadir en el método privado sin ensuciar la lógica principal.
