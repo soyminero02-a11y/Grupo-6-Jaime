@@ -20,4 +20,10 @@ class ClienteTest {
         Cliente cliente = new Cliente();
         assertNull(cliente.getId());
     }
+
+    @Test
+    void test_enum_tipo_cliente() {
+        assertEquals(2, Cliente.TipoCliente.values().length);
+        assertEquals(Cliente.TipoCliente.STANDARD, Cliente.TipoCliente.valueOf("STANDARD"));
+    }
 }
