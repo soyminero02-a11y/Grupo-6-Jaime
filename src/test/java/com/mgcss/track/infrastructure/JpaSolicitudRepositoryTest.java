@@ -1,5 +1,5 @@
 package com.mgcss.track.infrastructure;
- 
+
 import com.mgcss.track.domain.Solicitud;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
