@@ -57,4 +57,22 @@ class SolicitudServiceTest {
         
         verify(solicitudRepository, never()).save(any());
     }
+
+    @Test
+    void debe_crear_nueva_solicitud() {
+        Long solicitudId = 10L;
+        Long clienteId = 5L;
+        String descripcion = "Nueva incidencia";
+        
+        Cliente clienteDummy = new Cliente(clienteId, "Cliente API", "api@test.com", Cliente.TipoCliente.STANDARD);
+        Solicitud solicitudGuardada = new Solicitud(solicitudId, clienteDummy, descripcion);
+        
+        when(solicitudRepository.save(any(Solicitud.class))).thenReturn(solicitudGuardada);
+
+        Solicitud resultado = solicitudService.crearSolicitud(solicitudId, clienteId, descripcion);
+
+        assertNotNull(resultado);
+        assertEquals(descripcion, resultado.getDescripcion());
+        verify(solicitudRepository).save(any(Solicitud.class));
+    }
 }
