@@ -68,4 +68,16 @@ class SolicitudTest {
         assertEquals(Solicitud.Estado.CERRADA, solicitud.getHistorialEstados().get(1));
         assertEquals(Solicitud.Estado.EN_PROCESO, solicitud.getHistorialEstados().get(2));
     }
+
+    @Test
+    void debe_recuperar_los_datos_basicos_y_de_cierre() {
+        Solicitud solicitud = new Solicitud(1L, clienteTest, "Prueba de getters", Solicitud.Estado.EN_PROCESO);
+        
+        assertEquals("Prueba de getters", solicitud.getDescripcion());
+        assertEquals(clienteTest, solicitud.getCliente());
+        assertNull(solicitud.getFechaCierre()); 
+        
+        solicitud.cerrar();
+        assertNotNull(solicitud.getFechaCierre()); 
+    }
 }
