@@ -73,4 +73,46 @@ class SolicitudServiceTest {
         assertEquals(descripcion, resultado.getDescripcion());
         verify(solicitudRepository).save(any(Solicitud.class));
     }
+
+    @Test
+    void debe_buscar_por_id_y_encontrarlo() {
+        Cliente cliente = new Cliente(1L, "Test", "test@test.com", Cliente.TipoCliente.STANDARD);
+        Solicitud sol = new Solicitud(1L, cliente, "Desc");
+        when(solicitudRepository.findById(1L)).thenReturn(Optional.of(sol));
+        
+        assertNotNull(solicitudService.buscarPorId(1L));
+    }
+
+    @Test
+    void debe_listar_todas() {
+        when(solicitudRepository.findAll()).thenReturn(java.util.List.of(new Solicitud(1L, null, "Desc")));
+        assertFalse(solicitudService.listarTodas().isEmpty());
+    }
+
+    @Test
+    void debe_cambiar_estado_a_cerrada() {
+        Cliente cliente = new Cliente(1L, "Test", "test@test.com", Cliente.TipoCliente.STANDARD);
+        
+        Solicitud sol = new Solicitud(1L, cliente, "Desc", Solicitud.Estado.EN_PROCESO);
+        
+        when(solicitudRepository.findById(1L)).thenReturn(Optional.of(sol));
+        when(solicitudRepository.save(any())).thenReturn(sol);
+
+        Solicitud actualizada = solicitudService.cambiarEstado(1L, Solicitud.Estado.CERRADA);
+        assertEquals(Solicitud.Estado.CERRADA, actualizada.getEstado());
+    }
+
+    @Test
+    void debe_reabrir_solicitud() {
+        Cliente cliente = new Cliente(1L, "Test", "test@test.com", Cliente.TipoCliente.STANDARD);
+        
+        Solicitud sol = new Solicitud(1L, cliente, "Desc", Solicitud.Estado.EN_PROCESO);
+        sol.cerrar(); 
+        
+        when(solicitudRepository.findById(1L)).thenReturn(Optional.of(sol));
+        when(solicitudRepository.save(any())).thenReturn(sol);
+
+        Solicitud reabierta = solicitudService.reabrirSolicitud(1L);
+        assertEquals(Solicitud.Estado.EN_PROCESO, reabierta.getEstado());
+    }
 }

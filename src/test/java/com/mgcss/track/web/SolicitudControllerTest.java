@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -22,6 +23,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 @WebMvcTest(SolicitudController.class)
 class SolicitudControllerTest {
@@ -79,5 +82,34 @@ class SolicitudControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].id").value(1));
+    }
+
+    @Test
+    void al_asignar_tecnico_debe_devolver_200() throws Exception {
+        when(solicitudService.asignarTecnicoASolicitud(anyLong(), anyLong())).thenReturn(solicitudDummy);
+
+        mockMvc.perform(put("/api/solicitudes/1/tecnico")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("100"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void al_cambiar_estado_debe_devolver_200() throws Exception {
+        when(solicitudService.cambiarEstado(anyLong(), any(Solicitud.Estado.class))).thenReturn(solicitudDummy);
+
+        mockMvc.perform(put("/api/solicitudes/1/estado")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("CERRADA"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void al_reabrir_debe_devolver_200() throws Exception {
+        when(solicitudService.reabrirSolicitud(anyLong())).thenReturn(solicitudDummy);
+
+        mockMvc.perform(patch("/api/solicitudes/1/reabrir")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }
