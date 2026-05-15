@@ -32,14 +32,12 @@ class SolicitudServiceTest {
         Long solicitudId = 1L;
         Cliente clienteTest = new Cliente(1L, "Cliente Service", "service@test.com", Cliente.TipoCliente.STANDARD);
         
-      
         Solicitud solicitud = new Solicitud(solicitudId, clienteTest, "Prueba de servicio", Solicitud.Estado.ABIERTA);
         
-        Tecnico tecnico = new Tecnico(100L, true);
-
         when(solicitudRepository.findById(solicitudId)).thenReturn(Optional.of(solicitud));
 
-        solicitudService.asignarTecnicoASolicitud(solicitudId, tecnico);
+        // CORRECCIÓN: Le pasamos el ID (100L) en lugar del objeto
+        solicitudService.asignarTecnicoASolicitud(solicitudId, 100L);
 
         verify(solicitudRepository).save(solicitud);
     }
@@ -47,12 +45,12 @@ class SolicitudServiceTest {
     @Test
     void si_la_solicitud_no_existe_debe_lanzar_excepcion() {
         Long idInexistente = 999L;
-        Tecnico tecnico = new Tecnico(100L, true);
 
         when(solicitudRepository.findById(idInexistente)).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class, () -> {
-            solicitudService.asignarTecnicoASolicitud(idInexistente, tecnico);
+            // CORRECCIÓN: Le pasamos el ID (100L) en lugar del objeto
+            solicitudService.asignarTecnicoASolicitud(idInexistente, 100L);
         });
         
         verify(solicitudRepository, never()).save(any());
