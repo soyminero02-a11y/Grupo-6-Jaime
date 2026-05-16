@@ -1,6 +1,4 @@
-# syntax=docker/dockerfile:1
-
-#Start your image with a node
-FROM node:18-alpine
-
-RUN mkdir -p /app
+FROM eclipse-temurin:17-jre-alpine 
+WORKDIR /Repositorio_1
+COPY target/*.jar Repositorio_1.jar 
+ENTRYPOINT ["java","-jar","app.jar"]

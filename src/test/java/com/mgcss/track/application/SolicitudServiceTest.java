@@ -1,5 +1,6 @@
 package com.mgcss.track.application;
 
+import com.mgcss.track.domain.Cliente;
 import com.mgcss.track.domain.Solicitud;
 import com.mgcss.track.domain.Tecnico;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,18 +8,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class SolicitudServiceTest {
 
-    @Mock // 1. Creamos el mock del repositorio (simulamos la BD)
+    @Mock 
     private SolicitudRepository solicitudRepository;
 
-    @InjectMocks // 2. Inyectamos el mock en nuestro servicio
+    @InjectMocks
     private SolicitudService solicitudService;
 
     @BeforeEach
@@ -28,38 +29,111 @@ class SolicitudServiceTest {
 
     @Test
     void al_asignar_tecnico_valido_debe_guardar_solicitud_actualizada() {
-        // Arrange: Preparamos los datos
         Long solicitudId = 1L;
-        Solicitud solicitud = new Solicitud(solicitudId, Solicitud.Estado.ABIERTA);
-        Tecnico tecnico = new Tecnico(100L, true);
-
-        // Simulamos el comportamiento del repositorio falso
+        Cliente clienteTest = new Cliente(1L, "Cliente Service", "service@test.com", Cliente.TipoCliente.STANDARD);
+        
+        Solicitud solicitud = new Solicitud(solicitudId, clienteTest, "Prueba de servicio", Solicitud.Estado.ABIERTA);
+        
         when(solicitudRepository.findById(solicitudId)).thenReturn(Optional.of(solicitud));
 
-        // Act: Ejecutamos el método del servicio
-        solicitudService.asignarTecnicoASolicitud(solicitudId, tecnico);
+        // CORRECCIÓN: Le pasamos el ID (100L) en lugar del objeto
+        solicitudService.asignarTecnicoASolicitud(solicitudId, 100L);
 
-        // Assert: Verificamos que el servicio mandó a guardar la solicitud (verify)
         verify(solicitudRepository).save(solicitud);
     }
 
-
-@Test
+    @Test
     void si_la_solicitud_no_existe_debe_lanzar_excepcion() {
-        // Arrange: Preparamos un ID que no existe y un técnico válido
         Long idInexistente = 999L;
-        Tecnico tecnico = new Tecnico(100L, true);
 
-        // Simulamos que la base de datos NO encuentra nada (devuelve un Optional vacío)
         when(solicitudRepository.findById(idInexistente)).thenReturn(Optional.empty());
 
-        // Act & Assert: Verificamos que lanza una excepción específica (IllegalArgumentException)
         assertThrows(IllegalArgumentException.class, () -> {
-            solicitudService.asignarTecnicoASolicitud(idInexistente, tecnico);
+            // CORRECCIÓN: Le pasamos el ID (100L) en lugar del objeto
+            solicitudService.asignarTecnicoASolicitud(idInexistente, 100L);
         });
         
-        // Verificamos que NUNCA se intentó guardar nada si falló la búsqueda
         verify(solicitudRepository, never()).save(any());
     }
 
+    @Test
+    void debe_crear_nueva_solicitud() {
+        Long solicitudId = 10L;
+        Long clienteId = 5L;
+        String descripcion = "Nueva incidencia";
+        
+        Cliente clienteDummy = new Cliente(clienteId, "Cliente API", "api@test.com", Cliente.TipoCliente.STANDARD);
+        Solicitud solicitudGuardada = new Solicitud(solicitudId, clienteDummy, descripcion);
+        
+        when(solicitudRepository.save(any(Solicitud.class))).thenReturn(solicitudGuardada);
+
+        Solicitud resultado = solicitudService.crearSolicitud(solicitudId, clienteId,descripcion);
+
+        assertNotNull(resultado);
+        assertEquals(descripcion, resultado.getDescripcion());
+        verify(solicitudRepository).save(any(Solicitud.class));
+    }
+
+    @Test
+    void debe_buscar_por_id_y_encontrarlo() {
+        Cliente cliente = new Cliente(1L, "Test", "test@test.com", Cliente.TipoCliente.STANDARD);
+        Solicitud sol = new Solicitud(1L, cliente, "Desc");
+        when(solicitudRepository.findById(1L)).thenReturn(Optional.of(sol));
+        
+        assertNotNull(solicitudService.buscarPorId(1L));
+    }
+
+    @Test
+    void debe_listar_todas() {
+        when(solicitudRepository.findAll()).thenReturn(java.util.List.of(new Solicitud(1L, null, "Desc")));
+        assertFalse(solicitudService.listarTodas().isEmpty());
+    }
+
+    @Test
+    void debe_cambiar_estado_a_cerrada() {
+        Cliente cliente = new Cliente(1L, "Test", "test@test.com", Cliente.TipoCliente.STANDARD);
+        
+        Solicitud sol = new Solicitud(1L, cliente, "Desc", Solicitud.Estado.EN_PROCESO);
+        
+        when(solicitudRepository.findById(1L)).thenReturn(Optional.of(sol));
+        when(solicitudRepository.save(any())).thenReturn(sol);
+
+        Solicitud actualizada = solicitudService.cambiarEstado(1L, Solicitud.Estado.CERRADA);
+        assertEquals(Solicitud.Estado.CERRADA, actualizada.getEstado());
+    }
+
+    @Test
+    void debe_reabrir_solicitud() {
+        Cliente cliente = new Cliente(1L, "Test", "test@test.com", Cliente.TipoCliente.STANDARD);
+        
+        Solicitud sol = new Solicitud(1L, cliente, "Desc", Solicitud.Estado.EN_PROCESO);
+        sol.cerrar(); 
+        
+        when(solicitudRepository.findById(1L)).thenReturn(Optional.of(sol));
+        when(solicitudRepository.save(any())).thenReturn(sol);
+
+        Solicitud reabierta = solicitudService.reabrirSolicitud(1L);
+        assertEquals(Solicitud.Estado.EN_PROCESO, reabierta.getEstado());
+    }
+
+    @Test
+    void debe_lanzar_excepcion_si_intenta_cerrar_solicitud_recien_abierta() {
+        Cliente cliente = new Cliente(1L, "Test", "test@test.com", Cliente.TipoCliente.STANDARD);
+        Solicitud sol = new Solicitud(1L, cliente, "Desc", Solicitud.Estado.ABIERTA);
+        
+        when(solicitudRepository.findById(1L)).thenReturn(Optional.of(sol));
+
+        assertThrows(IllegalStateException.class, () -> {
+            solicitudService.cambiarEstado(1L, Solicitud.Estado.CERRADA);
+        });
+    }
+
+    @Test
+    void debe_lanzar_excepcion_si_busca_un_id_que_no_existe() {
+        when(solicitudRepository.findById(99L)).thenReturn(Optional.empty());
+        
+        assertThrows(Exception.class, () -> {
+            solicitudService.buscarPorId(99L);
+        });
+    }
 }
