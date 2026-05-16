@@ -67,7 +67,7 @@ class SolicitudServiceTest {
         
         when(solicitudRepository.save(any(Solicitud.class))).thenReturn(solicitudGuardada);
 
-        Solicitud resultado = solicitudService.crearSolicitud(solicitudId, clienteId, descripcion);
+        Solicitud resultado = solicitudService.crearSolicitud(solicitudId, clienteId,descripcion);
 
         assertNotNull(resultado);
         assertEquals(descripcion, resultado.getDescripcion());

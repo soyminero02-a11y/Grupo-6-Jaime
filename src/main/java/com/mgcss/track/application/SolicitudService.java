@@ -16,9 +16,9 @@ public class SolicitudService {
         this.solicitudRepository = solicitudRepository;
     }
 
-    public Solicitud crearSolicitud(Long id, Long clienteId, String descripcion) {
+    public Solicitud crearSolicitud(Long id,Long clienteId,String descripcion) {
         Cliente cliente = new Cliente(clienteId, "Cliente API", "api@test.com", Cliente.TipoCliente.STANDARD);
-        Solicitud solicitud = new Solicitud(id, cliente, descripcion);
+        Solicitud solicitud = new Solicitud(id, cliente,descripcion);
         return solicitudRepository.save(solicitud);
     }
 
