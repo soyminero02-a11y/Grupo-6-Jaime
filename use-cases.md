@@ -26,4 +26,4 @@ Acción:
 "CERRADA"
 Resultado esperado:
   "status": 500,
-  "error": "Internal Server Error",
+  "error": "Internal Server Error"

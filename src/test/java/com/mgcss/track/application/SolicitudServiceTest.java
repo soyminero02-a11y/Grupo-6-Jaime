@@ -115,4 +115,25 @@ class SolicitudServiceTest {
         Solicitud reabierta = solicitudService.reabrirSolicitud(1L);
         assertEquals(Solicitud.Estado.EN_PROCESO, reabierta.getEstado());
     }
+
+    @Test
+    void debe_lanzar_excepcion_si_intenta_cerrar_solicitud_recien_abierta() {
+        Cliente cliente = new Cliente(1L, "Test", "test@test.com", Cliente.TipoCliente.STANDARD);
+        Solicitud sol = new Solicitud(1L, cliente, "Desc", Solicitud.Estado.ABIERTA);
+        
+        when(solicitudRepository.findById(1L)).thenReturn(Optional.of(sol));
+
+        assertThrows(IllegalStateException.class, () -> {
+            solicitudService.cambiarEstado(1L, Solicitud.Estado.CERRADA);
+        });
+    }
+
+    @Test
+    void debe_lanzar_excepcion_si_busca_un_id_que_no_existe() {
+        when(solicitudRepository.findById(99L)).thenReturn(Optional.empty());
+        
+        assertThrows(Exception.class, () -> {
+            solicitudService.buscarPorId(99L);
+        });
+    }
 }

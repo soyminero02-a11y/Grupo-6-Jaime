@@ -112,4 +112,14 @@ class SolicitudControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
+     @Test
+    void al_crear_solicitud_con_datos_nulos_debe_devolver_400() throws Exception {
+        SolicitudRequestDTO requestMalo = new SolicitudRequestDTO(null, null, "Sin IDs");
+
+        mockMvc.perform(post("/api/solicitudes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestMalo)))
+                .andExpect(status().isBadRequest());
+    }
 }
