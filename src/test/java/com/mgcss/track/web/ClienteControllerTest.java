@@ -2,7 +2,6 @@ package com.mgcss.track.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mgcss.track.domain.Cliente;
-import com.mgcss.track.web.dto.SolicitudRequestDTO;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;

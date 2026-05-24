@@ -2,7 +2,6 @@ package com.mgcss.track.application;
 
 import com.mgcss.track.domain.Cliente;
 import com.mgcss.track.domain.Solicitud;
-import com.mgcss.track.domain.Tecnico;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
