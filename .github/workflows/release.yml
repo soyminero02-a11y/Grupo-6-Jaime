@@ -39,7 +39,7 @@ jobs:
           context: .
           push: true
         
-          tags: tuusuario/mgcss-api:latest, tuusuario/mgcss-api:${{ github.ref_name }}
+          tags: victornaruz/mgcss-api:latest, victornaruz/mgcss-api:${{ github.ref_name }}
 
       - name: 5. Crear Release en GitHub
         uses: softprops/action-gh-release@v1
