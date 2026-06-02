@@ -31,11 +31,10 @@ jobs:
       - name: 2.1. Dar permiso de ejecución
         run: chmod +x mvnw
 
-      - name: 2.2. Compilar y Ejecutar Tests (Build & Test)
+      - name: 2.2. Compilar, Ejecutar Tests y Quality Gate
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./mvnw clean verify sonar:sonar -Dsonar.projectKey=soyminero02-a11y_Grupo-6 -Dsonar.organization=soyminero02-a11y -Dsonar.host.url=https://sonarcloud.io -Dsonar.qualitygate.wait=true -Dsonar.qualitygate.wait.timeout=600
+        run: ./mvnw clean verify sonar:sonar -Dsonar.projectKey=soyminero02-a11y_Grupo-6 -Dsonar.organization=soyminero02-a11y -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.qualitygate.wait=true -Dsonar.branch.name=main
             
       - name: 3. Generar Artefacto (.jar)
         run: ./mvnw package -DskipTests
