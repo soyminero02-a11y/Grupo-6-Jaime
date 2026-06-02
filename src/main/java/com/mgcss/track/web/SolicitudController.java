@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/solicitudes")
@@ -56,8 +55,7 @@ public class SolicitudController {
     @GetMapping
     public ResponseEntity<List<SolicitudResponseDTO>> listar() {
         List<SolicitudResponseDTO> lista = service.listarTodas().stream()
-                .map(this::mapearToDTO)
-                .collect(Collectors.toList());
+                .map(this::mapearToDTO).toList();
         return ResponseEntity.ok(lista);
     }
 
@@ -102,7 +100,6 @@ public class SolicitudController {
             solicitud.getEstado().name(),
             tecnico,
             solicitud.getFechaCreacion(),
-            solicitud.getHistorialEstados().stream().map(Estado::name).collect(Collectors.toList())
-        );
+            solicitud.getHistorialEstados().stream().map(Estado::name).toList());
     }
 }
