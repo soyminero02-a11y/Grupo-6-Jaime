@@ -10,9 +10,7 @@ class SolicitudTest {
     @Test
     void no_debe_permitir_cerrar_solicitud_si_no_esta_en_proceso() {
         Solicitud solicitud = new Solicitud(1L, clienteTest, "Incidencia de prueba");
-        assertThrows(IllegalStateException.class, () -> {
-            solicitud.cerrar();
-        });
+        assertThrows(IllegalStateException.class, solicitud::cerrar);
     }
 
     @Test
