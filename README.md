@@ -4,7 +4,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=soyminero02-a11y_Grupo-6-Jaime&metric=alert_status)](https://sonarcloud.io/dashboard?id=soyminero02-a11y_Grupo-6-Jaime)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=soyminero02-a11y_Grupo-6-Jaime&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=soyminero02-a11y_Grupo-6-Jaime)
 
-Este proyecto es una aplicación de gestión de solicitudes desarrollada en Java, implementando una arquitectura limpia y guiada por pruebas (TDD). 
+Este proyecto es una aplicación de gestión de solicitudes desarrollada en Java, implementando una arquitectura limpia y guiada por pruebas (TDD). Es un fork de otro proyecto.
 
 ## Prerrequisitos
 
